@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    creation INTEGER NOT NULL DEFAULT (strftime('%s', 'now');)
+    creation TEXT NOT NULL DEFAULT (strftime('%s', 'now'))
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS posts (
     owner_id TEXT NOT NULL,
     reply_to TEXT,
     rating INTEGER NOT NULL DEFAULT 0,
-    creation INTEGER NOT NULL DEFAULT (strftime('%s', 'now');),
+    creation TEXT NOT NULL DEFAULT (strftime('%s', 'now')),
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (reply_to) REFERENCES posts(id) ON DELETE CASCADE
 );
