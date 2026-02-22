@@ -1,7 +1,6 @@
 package com.cne_project.cne_project.config.auth;
 
 import com.cne_project.cne_project.config.exception.ApiErrorResponse;
-import com.cne_project.cne_project.service.SecurityUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
