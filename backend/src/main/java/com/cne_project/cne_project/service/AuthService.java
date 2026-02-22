@@ -1,0 +1,61 @@
+package com.cne_project.cne_project.service;
+
+import com.cne_project.cne_project.model.dto.auth.LoginRequestDTO;
+import com.cne_project.cne_project.model.dto.auth.LoginResponseDTO;
+import com.cne_project.cne_project.model.entity.User;
+import com.cne_project.cne_project.repository.UserRepository;
+import com.cne_project.cne_project.utils.TokenPayload;
+import jakarta.persistence.EntityNotFoundException;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+@Service
+@Slf4j
+@AllArgsConstructor
+@Transactional
+public class AuthService {
+
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
+
+    public LoginResponseDTO login (LoginRequestDTO request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.username(),
+                        request.password()
+                )
+        );
+
+        User user = userRepository.findByUsername(request.username())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        log.info("User authenticated, generating access response");
+
+       String accessToken = generateAccessToken(user);
+       String refreshToken = generateRefreshToken();
+
+        return new LoginResponseDTO(
+                user.getUsername(), user.getPassword(), accessToken, refreshToken
+        );
+    }
+
+    private String generateAccessToken(User user) {
+        return jwtService.generateToken(
+                TokenPayload.builder().
+                        userId(user.getId())
+                        .build()
+        );
+    }
+
+    private String generateRefreshToken() {
+        return UUID.randomUUID().toString();
+    }
+
+}
