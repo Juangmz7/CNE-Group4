@@ -1,4 +1,4 @@
-package com.cne_project.cne_project.model;
+package com.cne_project.cne_project.model.entity;
 
 import jakarta.persistence.*;
 
