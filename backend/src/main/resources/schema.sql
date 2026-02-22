@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    creation_date TEXT NOT NULL DEFAULT (datetime('now'))
+    creation INTEGER NOT NULL DEFAULT (strftime('%s', 'now');)
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -14,14 +14,14 @@ CREATE TABLE IF NOT EXISTS posts (
     owner_id TEXT NOT NULL,
     reply_to TEXT,
     rating INTEGER NOT NULL DEFAULT 0,
-    creation_date TEXT NOT NULL DEFAULT (datetime('now')),
+    creation INTEGER NOT NULL DEFAULT (strftime('%s', 'now');),
     FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (reply_to) REFERENCES posts(id) ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_posts_owner_id ON posts(owner_id);
 CREATE INDEX IF NOT EXISTS idx_posts_reply_to ON posts(reply_to);
-CREATE INDEX IF NOT EXISTS idx_posts_creation_date ON posts(creation_date);
+CREATE INDEX IF NOT EXISTS idx_posts_creation ON posts(creation);
 
 CREATE VIEW IF NOT EXISTS user_karma AS
 SELECT u.id, COALESCE(SUM(p.rating), 0) AS karma
