@@ -12,6 +12,4 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TokenPayload {
     String userId;
-    String username;
-    String email;
 }

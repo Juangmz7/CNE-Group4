@@ -8,7 +8,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Files;
@@ -66,15 +65,11 @@ public class JwtService {
     public String generateToken(TokenPayload payload) {
         Map<String, Object> claims = new HashMap<>();
 
-        // Add extra claims
-        claims.put("userId", payload.getUserId());
-        claims.put("email", payload.getEmail());
-
         long JWT_EXPIRATION = 1000 * 60 * 30;
         return Jwts.builder()
                 .header().keyId("user-key-id").and()
                 .claims(claims)
-                .subject(payload.getUsername())
+                .subject(payload.getUserId())
                 .signWith(privateKey, Jwts.SIG.RS256)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 // 30 minutes for token expiration
@@ -84,26 +79,18 @@ public class JwtService {
 
     public TokenPayload extractPayload(String token) {
 
-        String username = extractClaim(token, Claims::getSubject);
-
         String userIdString = extractClaim(token,
                 claims -> claims.get("userId", String.class)
         );
 
-        String email = extractClaim(token,
-                claims -> claims.get("email", String.class)
-        );
-
         return new TokenPayload(
-                userIdString,
-                username,
-                email
+                userIdString
         );
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        boolean validUsername = extractPayload(token).getUsername()
-                .equals(userDetails.getUsername());
+    public boolean validateToken(String token, TokenPayload payload) {
+        boolean validUsername = extractPayload(token).getUserId()
+                .equals(payload.getUserId());
 
         // If the token has expired
         boolean tokenExpired = isTokenExpired(token);
@@ -137,7 +124,7 @@ public class JwtService {
 
     public Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(publicKey) //
+                .verifyWith(publicKey)
                 .build()
                 .parseSignedClaims(token) // If signature is fake, this throws an Exception
                 .getPayload();

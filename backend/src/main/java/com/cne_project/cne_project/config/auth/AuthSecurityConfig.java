@@ -1,9 +1,10 @@
 package com.cne_project.cne_project.config.auth;
 
-import com.cne_project.cne_project.service.JwtService;
+import com.cne_project.cne_project.config.exception.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -16,20 +17,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import tools.jackson.databind.ObjectMapper;
+
+import java.time.OffsetDateTime;
 
 
 @Configuration
 public class AuthSecurityConfig {
 
     final private UserDetailsService userDetailsService;
-    final private JwtService jwtService;
+    final private ObjectMapper objectMapper;
 
     public AuthSecurityConfig(
             UserDetailsService userDetailsService,
-            JwtService jwtService
+            ObjectMapper objectMapper
     ) {
         this.userDetailsService = userDetailsService;
-        this.jwtService = jwtService;
+        this.objectMapper = objectMapper;
     }
 
     @Bean
@@ -81,9 +85,17 @@ public class AuthSecurityConfig {
     @Bean
     public AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) -> {
-            response.setContentType("application/json");
+            ApiErrorResponse error = ApiErrorResponse.builder()
+                    .timestamp(OffsetDateTime.now())
+                    .status(HttpServletResponse.SC_UNAUTHORIZED)
+                    .error("Missing authentication header")
+                    .message(authException.getMessage())
+                    .path(request.getRequestURI())
+                    .build();
+
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("{\"error\": \"" + authException.getMessage() + "\"}");
+            response.getWriter().write(objectMapper.writeValueAsString(error));
         };
     }
 
