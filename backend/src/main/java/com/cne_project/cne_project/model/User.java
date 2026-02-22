@@ -29,6 +29,12 @@ public class User {
 
     protected User() {}
 
+    public User(String username, String email, String password) {
+        setUsername(username);
+        setEmail(email);
+        setPassword(password);
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
