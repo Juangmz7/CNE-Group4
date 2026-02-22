@@ -28,6 +28,14 @@ public class Post {
     @Column(nullable = false)
     private Long creation = Instant.now().getEpochSecond();
 
+    protected Post() {}
+
+    public Post(String content, User owner, Post reply) {
+        setContent(content);
+        setOwner(owner);
+        setReply(reply);
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
