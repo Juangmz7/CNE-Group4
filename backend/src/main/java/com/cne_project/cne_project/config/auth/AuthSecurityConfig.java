@@ -1,6 +1,7 @@
 package com.cne_project.cne_project.config.auth;
 
 import com.cne_project.cne_project.config.exception.ApiErrorResponse;
+import com.cne_project.cne_project.service.SecurityUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,7 @@ public class AuthSecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "api/v1/user/.well-known/jwks.json",
+                                "/api/v1/user/.well-known/jwks.json",
                                 "/webjars/**",
                                 "/error",
                                 "/v3/api-docs/**",
