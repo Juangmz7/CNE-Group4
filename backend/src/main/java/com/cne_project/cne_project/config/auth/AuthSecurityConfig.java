@@ -2,6 +2,7 @@ package com.cne_project.cne_project.config.auth;
 
 import com.cne_project.cne_project.config.exception.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -17,24 +18,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.OffsetDateTime;
 
 
 @Configuration
+@AllArgsConstructor
 public class AuthSecurityConfig {
 
     final private UserDetailsService userDetailsService;
     final private ObjectMapper objectMapper;
-
-    public AuthSecurityConfig(
-            UserDetailsService userDetailsService,
-            ObjectMapper objectMapper
-    ) {
-        this.userDetailsService = userDetailsService;
-        this.objectMapper = objectMapper;
-    }
+    final private JwtFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
@@ -43,7 +39,8 @@ public class AuthSecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/user/.well-known/jwks.json",
+                                "/api/auth/register",
+                                "/api/auth/login",
                                 "/webjars/**",
                                 "/error",
                                 "/v3/api-docs/**",
@@ -52,6 +49,7 @@ public class AuthSecurityConfig {
                         ).permitAll() // Allow access without token or headers
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(unauthorizedEntryPoint())
                 )
