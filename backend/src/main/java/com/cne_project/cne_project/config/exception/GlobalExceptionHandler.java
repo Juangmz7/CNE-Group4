@@ -63,6 +63,13 @@ public class GlobalExceptionHandler {
         return createErrorResponseEntity(exception, request, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler({
+            DuplicateEntityException.class,
+    })
+    public ResponseEntity<ApiErrorResponse> handlerConflictException(RuntimeException exception, WebRequest request) {
+        return createErrorResponseEntity(exception, request, HttpStatus.CONFLICT);
+    }
+
 //    @ExceptionHandler({
 //
 //    })

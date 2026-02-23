@@ -1,5 +1,6 @@
 package com.cne_project.cne_project.service;
 
+import com.cne_project.cne_project.config.exception.DuplicateEntityException;
 import com.cne_project.cne_project.model.dto.auth.LoginRequestDTO;
 import com.cne_project.cne_project.model.dto.auth.LoginResponseDTO;
 import com.cne_project.cne_project.model.dto.auth.RegisterRequestDTO;
@@ -65,8 +66,8 @@ public class AuthService {
                 .isPresent();
 
         if (exists) {
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT, "User already exists"
+            throw new DuplicateEntityException(
+                    "User already exists"
             );
         }
 
