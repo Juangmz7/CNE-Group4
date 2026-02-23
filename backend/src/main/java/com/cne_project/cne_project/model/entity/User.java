@@ -1,6 +1,8 @@
 package com.cne_project.cne_project.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.time.Instant;
 
 @Entity
@@ -29,6 +31,7 @@ public class User {
 
     protected User() {}
 
+    @Builder
     public User(String username, String email, String password) {
         setUsername(username);
         setEmail(email);
