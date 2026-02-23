@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,13 +20,13 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @RequestMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid LoginRequestDTO request) {
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @RequestMapping("/register")
-    public ResponseEntity<Void> register(@Valid RegisterRequestDTO request) {
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDTO request) {
         authService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
