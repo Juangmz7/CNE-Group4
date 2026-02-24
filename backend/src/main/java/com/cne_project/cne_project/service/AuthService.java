@@ -11,8 +11,11 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,8 +82,19 @@ public class AuthService {
                 .password(hashedPassword)
                 .build();
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        log.info("User registered successfully");
+        log.debug("User registered successfully with id: {}", user.getId());
+    }
+
+    public String currentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("Access denied: User not authenticated");
+        }
+        if (!(authentication.getPrincipal() instanceof String userId)) {
+            throw new IllegalStateException("Config error, principal is not UserPrincipal");
+        }
+        return userId;
     }
 }
