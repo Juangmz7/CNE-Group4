@@ -4,7 +4,6 @@ import com.cne_project.cne_project.model.dto.post.PostRequestDTO;
 import com.cne_project.cne_project.model.dto.post.PostResponseDTO;
 import com.cne_project.cne_project.service.PostService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
