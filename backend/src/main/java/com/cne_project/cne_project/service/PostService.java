@@ -9,6 +9,7 @@ import com.cne_project.cne_project.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -60,6 +61,34 @@ public class PostService {
         return toPostResponseDTO(post, getCurrentUser());
     }
 
+    public PostResponseDTO updatePost(@Valid PostRequestDTO request, String postId) {
+        var postToUpdate = fetchPostById(postId);
+
+        validatePostAccess(postToUpdate);
+
+        var currentuser =  getCurrentUser();
+        if (!hasPostChanged(postToUpdate, request)) {
+            return toPostResponseDTO(postToUpdate,  currentuser);
+        }
+
+        postToUpdate.setContent(request.content());
+        var updatedPost = postRepository.save(postToUpdate);
+
+        return toPostResponseDTO(updatedPost, currentuser);
+    }
+
+    private boolean hasPostChanged(Post postToUpdate, @Valid PostRequestDTO request) {
+        return !postToUpdate.getContent().equals(request.content());
+    }
+
+    private void validatePostAccess(Post post) {
+        var currentUser = getCurrentUser();
+
+        // Check whether who is updating the post is the owner
+        if (!post.getOwner().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You are not the owner of this post");
+        }
+    }
 
     private Post createPostInstance(String content, User currentUser, Post replyTo) {
         return Post.builder()
