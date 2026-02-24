@@ -32,7 +32,7 @@ public class PostService {
 
         var savedPost = postRepository.save(post);
 
-        log.debug(post.getId());
+        log.info("Post with id: {} saved successfully", savedPost.getId());
 
         return toPostResponseDTO(savedPost, currentUser);
     }
@@ -50,7 +50,7 @@ public class PostService {
         );
 
         var savedPost = postRepository.save(post);
-        log.debug(post.getId());
+        log.info("Post reply with id: {} saved successfully", postId);
 
         return toPostResponseDTO(savedPost, currentUser);
     }
@@ -58,6 +58,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponseDTO getPostById(String postId) {
         Post post = fetchPostById(postId);
+        log.info("Returning post with id {}", postId);
         return toPostResponseDTO(post, getCurrentUser());
     }
 
@@ -74,6 +75,8 @@ public class PostService {
         postToUpdate.setContent(request.content());
         var updatedPost = postRepository.save(postToUpdate);
 
+        log.info("Post with id {} updated successfully", postId);
+
         return toPostResponseDTO(updatedPost, currentuser);
     }
 
@@ -83,6 +86,7 @@ public class PostService {
         validatePostAccess(postToDelete);
 
         postRepository.delete(postToDelete);
+        log.info("Post with id {} deleted successfully", postId);
     }
 
     private boolean hasPostChanged(Post postToUpdate, PostRequestDTO request) {
