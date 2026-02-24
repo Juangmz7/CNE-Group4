@@ -6,6 +6,7 @@ import com.cne_project.cne_project.model.entity.Post;
 import com.cne_project.cne_project.model.entity.User;
 import com.cne_project.cne_project.repository.PostRepository;
 import com.cne_project.cne_project.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,27 +23,74 @@ public class PostService {
     private final UserRepository userRepository;
 
     public PostResponseDTO createPost(PostRequestDTO request) {
-        String userId = authService.currentUserId();
-        User currentUser = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("Current user not found"));
+        var currentUser = getCurrentUser();
 
-        var post = Post.builder()
-                .content(request.content())
-                .owner(currentUser)
-                .reply(null)
-                .build();
+        var post = createPostInstance(
+                request.content(), currentUser, null
+        );
 
         var savedPost = postRepository.save(post);
 
-        log.debug(post.toString());
+        log.debug(post.getId());
 
+        return toPostResponseDTO(savedPost, currentUser);
+    }
+
+    public PostResponseDTO replyPost(
+            PostRequestDTO request,
+            String postId
+    ) {
+        var currentUser = getCurrentUser();
+
+        Post replyTo = fetchPostById(postId);
+
+        var post = createPostInstance(
+                request.content(), currentUser, replyTo
+        );
+
+        var savedPost = postRepository.save(post);
+        log.debug(post.getId());
+
+        return toPostResponseDTO(savedPost, currentUser);
+    }
+
+    @Transactional(readOnly = true)
+    public PostResponseDTO getPostById(String postId) {
+        Post post = fetchPostById(postId);
+        return toPostResponseDTO(post, getCurrentUser());
+    }
+
+
+    private Post createPostInstance(String content, User currentUser, Post replyTo) {
+        return Post.builder()
+                .content(content)
+                .owner(currentUser)
+                .reply(replyTo)
+                .build();
+    }
+
+    private User getCurrentUser() {
+        String userId = authService.currentUserId();
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("Current user not found"));
+    }
+
+    private PostResponseDTO toPostResponseDTO(Post post, User user) {
         return new PostResponseDTO(
-                savedPost.getId(),
-                currentUser.getId(),
-                currentUser.getUsername(),
-                savedPost.getContent(),
-                savedPost.getRating(),
-                savedPost.getCreation()
+                post.getId(),
+                post.getReply() == null ? null : post.getReply().getId(),
+                user.getId(),
+                user.getUsername(),
+                post.getContent(),
+                post.getRating(),
+                post.getCreation()
         );
     }
+
+    private Post fetchPostById(String postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+    }
+
+
 }
