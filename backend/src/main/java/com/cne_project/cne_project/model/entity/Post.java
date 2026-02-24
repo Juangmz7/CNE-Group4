@@ -10,6 +10,7 @@ import java.time.Instant;
 public class Post {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(length = 32)
     private String id;
 
