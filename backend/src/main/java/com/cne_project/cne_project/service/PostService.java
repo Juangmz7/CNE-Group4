@@ -77,7 +77,15 @@ public class PostService {
         return toPostResponseDTO(updatedPost, currentuser);
     }
 
-    private boolean hasPostChanged(Post postToUpdate, @Valid PostRequestDTO request) {
+    public void deletePost(String postId) {
+        var postToDelete = fetchPostById(postId);
+
+        validatePostAccess(postToDelete);
+
+        postRepository.delete(postToDelete);
+    }
+
+    private boolean hasPostChanged(Post postToUpdate, PostRequestDTO request) {
         return !postToUpdate.getContent().equals(request.content());
     }
 
