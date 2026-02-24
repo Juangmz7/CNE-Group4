@@ -79,12 +79,10 @@ public class JwtService {
 
     public TokenPayload extractPayload(String token) {
 
-        String userIdString = extractClaim(token,
-                claims -> claims.get("userId", String.class)
-        );
+        String userId =  extractClaim(token, Claims::getSubject);
 
         return new TokenPayload(
-                userIdString
+                userId
         );
     }
 

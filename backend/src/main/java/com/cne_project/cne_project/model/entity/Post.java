@@ -1,6 +1,8 @@
 package com.cne_project.cne_project.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+
 import java.time.Instant;
 
 @Entity
@@ -8,6 +10,7 @@ import java.time.Instant;
 public class Post {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(length = 32)
     private String id;
 
@@ -30,6 +33,7 @@ public class Post {
 
     protected Post() {}
 
+    @Builder
     public Post(String content, User owner, Post reply) {
         setContent(content);
         setOwner(owner);
