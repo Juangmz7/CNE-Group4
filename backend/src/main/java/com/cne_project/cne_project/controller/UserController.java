@@ -21,20 +21,4 @@ public class UserController {
         var response = userService.getUserProfile(userId.toString());
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/karma/increase")
-    public ResponseEntity<Void> increaseUserKarma(
-            @RequestBody UUID userId
-    ) {
-        userService.increaseUserKarma(userId.toString());
-        return ResponseEntity.noContent().build();
-    }
-
-    @PostMapping("/karma/decrease")
-    public ResponseEntity<Void> decreaseUserKarma(
-            @RequestBody UUID userId
-    ) {
-        userService.decreaseUserKarma(userId.toString());
-        return ResponseEntity.noContent().build();
-    }
 }
