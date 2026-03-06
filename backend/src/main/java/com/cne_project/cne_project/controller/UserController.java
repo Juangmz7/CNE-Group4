@@ -2,7 +2,6 @@ package com.cne_project.cne_project.controller;
 
 import com.cne_project.cne_project.model.dto.auth.UserProfileResponseDTO;
 import com.cne_project.cne_project.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.ResponseEntity;
