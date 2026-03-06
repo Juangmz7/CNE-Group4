@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -195,6 +196,22 @@ public class PostService {
                             post.getCreation()
                     );
                 })
+                .toList();
+    }
+
+    public List<PostResponseDTO> getAllPostsReplies(String postId) {
+
+        return postRepository.findDirectReplies(postId)
+                .stream()
+                .map(post -> new PostResponseDTO(
+                        post.getId(),
+                        post.getReply().getId(),
+                        post.getOwner().getId(),
+                        post.getContent(),
+                        post.getOwner().getUsername(),
+                        post.getRating(),
+                        post.getCreation()
+                ))
                 .toList();
     }
 }

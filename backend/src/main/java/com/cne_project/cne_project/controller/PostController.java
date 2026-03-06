@@ -85,6 +85,13 @@ public class PostController {
     }
 
     // GetPostReplies
+    @GetMapping("/{postId}/replies")
+    public ResponseEntity<List<PostResponseDTO>> getAllPostsReplies (
+        @PathVariable UUID postId
+    ) {
+        return ResponseEntity
+                .ok(postService.getAllPostsReplies(postId.toString()));
+    }
 
 
 }
