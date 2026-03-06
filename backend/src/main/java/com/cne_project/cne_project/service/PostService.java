@@ -62,6 +62,44 @@ public class PostService {
         return toPostResponseDTO(post, getCurrentUser());
     }
 
+    @Transactional
+    public void increasePostRating(String postId) {
+        Post post = fetchPostById(postId);
+
+        checkIfSameUser(post.getOwner().getId());
+
+        post.setRating(post.getRating() + 1);
+
+        postRepository.save(post);
+
+        log.info("Rating for post id {} increase succeeded.", postId);
+    }
+
+
+    @Transactional
+    public void decreasePostRating(String postId) {
+        Post post = fetchPostById(postId);
+
+        checkIfSameUser(post.getOwner().getId());
+
+        post.setRating(post.getRating() - 1);
+
+        postRepository.save(post);
+
+        log.info("Rating for post id {} decrease succeeded.", postId);
+
+    }
+
+    private void checkIfSameUser(String userId) {
+        String currentUserId = authService.currentUserId();
+
+        if (!userId.equals(currentUserId)) {
+            throw new IllegalStateException("You cannot perform this action");
+        }
+    }
+
+
+
     public PostResponseDTO updatePost(@Valid PostRequestDTO request, String postId) {
         var postToUpdate = fetchPostById(postId);
 

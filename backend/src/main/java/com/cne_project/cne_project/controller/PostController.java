@@ -60,6 +60,22 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostById(postId.toString()));
     }
 
+    @PostMapping("/rating/increase")
+    public ResponseEntity<Void> increasePostRating(
+            @RequestBody UUID postId
+    ) {
+        postService.increasePostRating(postId.toString());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/rating/decrease")
+    public ResponseEntity<Void> decreasePostRating(
+            @RequestBody UUID postId
+    ) {
+        postService.decreasePostRating(postId.toString());
+        return ResponseEntity.noContent().build();
+    }
+
     // GetPostReplies
 
 
