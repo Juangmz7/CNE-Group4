@@ -2,6 +2,7 @@ package com.cne_project.cne_project.controller;
 
 import com.cne_project.cne_project.model.dto.post.PostRequestDTO;
 import com.cne_project.cne_project.model.dto.post.PostResponseDTO;
+import com.cne_project.cne_project.model.dto.post.PostViewDTO;
 import com.cne_project.cne_project.service.PostService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -74,6 +76,12 @@ public class PostController {
     ) {
         postService.decreasePostRating(postId.toString());
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PostViewDTO>> getAllPosts () {
+        return ResponseEntity
+                .ok(postService.getAllPosts());
     }
 
     // GetPostReplies

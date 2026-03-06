@@ -2,6 +2,7 @@ package com.cne_project.cne_project.service;
 
 import com.cne_project.cne_project.model.dto.post.PostRequestDTO;
 import com.cne_project.cne_project.model.dto.post.PostResponseDTO;
+import com.cne_project.cne_project.model.dto.post.PostViewDTO;
 import com.cne_project.cne_project.model.entity.Post;
 import com.cne_project.cne_project.model.entity.User;
 import com.cne_project.cne_project.repository.PostRepository;
@@ -9,9 +10,13 @@ import com.cne_project.cne_project.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -172,4 +177,24 @@ public class PostService {
     }
 
 
+    public List<PostViewDTO> getAllPosts() {
+        String currentUserId = getCurrentUser().getId();
+        return postRepository.findPostsNotOwnedBy(currentUserId)
+                .stream()
+                .map(post -> {
+                    String content = post.getContent();
+                    String preview = (content != null && content.length() > 30)
+                            ? content.substring(0, 30)
+                            : content;
+
+                    return new PostViewDTO(
+                            post.getId(),
+                            post.getOwner().getId(),
+                            post.getOwner().getUsername(),
+                            preview,
+                            post.getCreation()
+                    );
+                })
+                .toList();
+    }
 }
