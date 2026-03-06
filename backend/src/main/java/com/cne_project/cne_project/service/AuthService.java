@@ -49,7 +49,7 @@ public class AuthService {
        String accessToken = generateAccessToken(user);
 
         return new LoginResponseDTO(
-                user.getUsername(), user.getPassword(), accessToken
+                user.getId(), user.getUsername(), user.getPassword(), accessToken
         );
     }
 
