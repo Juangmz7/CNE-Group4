@@ -93,7 +93,7 @@ public class PostService {
     private void checkIfSameUser(String userId) {
         String currentUserId = authService.currentUserId();
 
-        if (!userId.equals(currentUserId)) {
+        if (userId.equals(currentUserId)) {
             throw new IllegalStateException("You cannot perform this action");
         }
     }
