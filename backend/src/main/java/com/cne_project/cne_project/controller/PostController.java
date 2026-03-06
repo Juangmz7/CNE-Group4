@@ -60,17 +60,17 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostById(postId.toString()));
     }
 
-    @PostMapping("/rating/increase")
+    @PostMapping("/{postId}/rating/increase")
     public ResponseEntity<Void> increasePostRating(
-            @RequestBody UUID postId
+            @PathVariable UUID postId
     ) {
         postService.increasePostRating(postId.toString());
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/rating/decrease")
+    @PostMapping("/{postId}/rating/decrease")
     public ResponseEntity<Void> decreasePostRating(
-            @RequestBody UUID postId
+            @PathVariable UUID postId
     ) {
         postService.decreasePostRating(postId.toString());
         return ResponseEntity.noContent().build();
