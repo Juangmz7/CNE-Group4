@@ -9,7 +9,11 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, String> {
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.owner WHERE p.owner.id != :currentUserId")
+    @Query("""
+            SELECT p FROM Post p JOIN FETCH p.owner
+            WHERE p.owner.id != :currentUserId
+            AND p.reply IS NULL
+            """)
     List<Post> findPostsNotOwnedBy(@Param("currentUserId") String currentUserId);
 
     @Query("SELECT p FROM Post p JOIN FETCH p.owner WHERE p.reply.id = :postId ORDER BY p.creation ASC")
