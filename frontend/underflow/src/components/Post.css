@@ -1,0 +1,31 @@
+.post-card {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 16px;
+  max-width: 500px;
+  font-family: sans-serif;
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.post-body {
+  margin-bottom: 16px;
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  margin-left: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
