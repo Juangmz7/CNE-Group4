@@ -2,6 +2,8 @@ package com.cne_project.cne_project.config.exception;
 
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +61,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             AccessDeniedException.class,
             IllegalStateException.class,
-            ExpiredJwtException.class
+            ExpiredJwtException.class,
+            SignatureException.class,
+            MalformedJwtException.class
     })
     public ResponseEntity<ApiErrorResponse> handlerAuthorisationException(RuntimeException exception, WebRequest request) {
         return createErrorResponseEntity(exception, request, HttpStatus.FORBIDDEN);

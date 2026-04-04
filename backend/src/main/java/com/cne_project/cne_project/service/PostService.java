@@ -179,8 +179,7 @@ public class PostService {
 
 
     public List<PostViewDTO> getAllPosts() {
-        String currentUserId = getCurrentUser().getId();
-        return postRepository.findPostsNotOwnedBy(currentUserId)
+        return postRepository.findPostsNotRepliedTo()
                 .stream()
                 .map(post -> {
                     String content = post.getContent();
@@ -207,8 +206,8 @@ public class PostService {
                         post.getId(),
                         post.getReply().getId(),
                         post.getOwner().getId(),
-                        post.getContent(),
                         post.getOwner().getUsername(),
+                        post.getContent(),
                         post.getRating(),
                         post.getCreation()
                 ))
