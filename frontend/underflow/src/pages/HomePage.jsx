@@ -1,19 +1,24 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import PostsList from "../components/home/PostsList";
+import CreatePostInput from "../components/home/CreatePostInput";
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const mockPostId = '123e4567-e89b-12d3-a456-426614174000';
+  const [token, setToken] = useState(localStorage.getItem('jwt_token') || null);
 
   return (
     <div style={{ padding: '20px' }}>
       <h1>Main Feed</h1>
-      <button 
-        onClick={() => navigate(`/post/${mockPostId}`)}
-        style={{ padding: '10px', cursor: 'pointer' }}
-      >
-        Mock button for post
-      </button>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px',
+          marginBottom: '20px'
+        }}>
+          <PostsList token={token} />
+        </div>
+        <div>
+          <CreatePostInput token={token} />
+        </div>
     </div>
   );
 };

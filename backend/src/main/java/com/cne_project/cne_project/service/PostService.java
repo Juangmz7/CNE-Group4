@@ -12,9 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -151,6 +153,7 @@ public class PostService {
                 .content(content)
                 .owner(currentUser)
                 .reply(replyTo)
+                .creation(System.currentTimeMillis())
                 .build();
     }
 
@@ -179,8 +182,7 @@ public class PostService {
 
 
     public List<PostViewDTO> getAllPosts() {
-        String currentUserId = getCurrentUser().getId();
-        return postRepository.findPostsNotOwnedBy(currentUserId)
+        return postRepository.findPostsNotRepliedTo()
                 .stream()
                 .map(post -> {
                     String content = post.getContent();
@@ -200,18 +202,31 @@ public class PostService {
     }
 
     public List<PostResponseDTO> getAllPostsReplies(String postId) {
-
-        return postRepository.findDirectReplies(postId)
+        return fetchAllReplies(postRepository.findDirectReplies(postId))
                 .stream()
                 .map(post -> new PostResponseDTO(
                         post.getId(),
                         post.getReply().getId(),
                         post.getOwner().getId(),
-                        post.getContent(),
                         post.getOwner().getUsername(),
+                        post.getContent(),
                         post.getRating(),
                         post.getCreation()
                 ))
-                .toList();
+                .sorted(Comparator.comparing(PostResponseDTO::creation)) // Sort by creation date
+                .toList().reversed();
+    }
+
+    private List<Post> fetchAllReplies(List<Post> replies) {
+        List<Post> output = new java.util.ArrayList<>(replies);
+
+        for (Post reply : replies) {
+            List<Post> directReplies = postRepository.findDirectReplies(reply.getId());
+            if (!directReplies.isEmpty()) {
+                output.addAll(fetchAllReplies(directReplies));
+            }
+        }
+
+        return output;
     }
 }
