@@ -13,6 +13,7 @@ const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, isDetailVie
   const [replyContent, setReplyContent] = useState('');
 
   const isAuthor = user?.id === authorId;
+  const formattedTime = new Date(creation).toLocaleTimeString();
   const formattedDate = new Date(creation).toLocaleDateString();
 
   const handleSaveUpdate = async () => {
@@ -24,7 +25,7 @@ const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, isDetailVie
     <div className="post-card">
       <div className="post-header">
         <strong>{authorName} {isAuthor && "(You)"}</strong>
-        <span>{formattedDate}</span>
+        <span>{formattedTime} - {formattedDate}</span>
       </div>
       
       <div className="post-body">

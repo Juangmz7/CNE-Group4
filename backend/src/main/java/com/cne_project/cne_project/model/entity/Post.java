@@ -34,10 +34,11 @@ public class Post {
     protected Post() {}
 
     @Builder
-    public Post(String content, User owner, Post reply) {
+    public Post(String content, User owner, Post reply, Long creation) {
         setContent(content);
         setOwner(owner);
         setReply(reply);
+        setCreation(creation);
     }
 
     public String getId() { return id; }
