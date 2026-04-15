@@ -77,6 +77,13 @@ const ProfileDetail = () => {
                   onDelete={null}
                   navigate={navigate}
                 />
+                <input type="button" value="View Details" onClick={() => navigate(`/post/${post.id}`)} style={{
+                    padding: "5px 10px",
+                    backgroundColor: "#2563eb",
+                    color: "white",
+                    border: "none",
+                    cursor: "pointer",
+                }} />
               </div>
             ))
           ) : (
