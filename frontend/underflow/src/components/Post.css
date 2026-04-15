@@ -7,11 +7,19 @@
 }
 
 .post-header {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 12px;
   border-bottom: 1px solid #eee;
   padding-bottom: 8px;
+}
+
+.post-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-ids {
+    color: #666;
+    font-size: 75%;
 }
 
 .post-body {

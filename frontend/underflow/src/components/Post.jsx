@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import './Post.css';
 
 const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, navigate, isDetailView = false }) => {
-  const { id, authorName, authorId, content, rating, creation } = post;
+  const { id, authorName, replyToId, authorId, content, rating, creation } = post;
   const { user } = useAuth();
   
   const [isEditing, setIsEditing] = useState(false);
@@ -24,8 +24,19 @@ const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, navigate, i
   return (
     <div className="post-card">
       <div className="post-header">
-        <strong onClick={() => navigate(`/profile/${authorId}`)}>{authorName} {isAuthor && "(You)"}</strong>
-        <span>{formattedTime} - {formattedDate}</span>
+        <div className="post-info">
+            <strong onClick={() => navigate(`/profile/${authorId}`)}>{authorName} {isAuthor && "(You)"}</strong>
+            <span>{formattedTime} - {formattedDate}</span>
+        </div>
+        <div className="post-ids">
+            <span>Post <strong>...{id.slice(-8)}</strong></span>
+            {replyToId != null && (
+                <>
+                    <br></br>
+                    <span>Reply to <strong onClick={() => navigate(`/post/${replyToId}`)}>...{replyToId.slice(-8)}</strong></span>
+                </>
+            )}
+        </div>
       </div>
       
       <div className="post-body">
