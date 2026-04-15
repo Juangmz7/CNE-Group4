@@ -3,8 +3,6 @@ package com.cne_project.cne_project.model.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 
-import java.time.Instant;
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -24,7 +22,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private Long creation = Instant.now().getEpochSecond();
+    private Long creation = System.currentTimeMillis();
 
     @OneToOne
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
