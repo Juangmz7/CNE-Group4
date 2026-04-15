@@ -18,6 +18,12 @@ public interface PostRepository extends JpaRepository<Post, String> {
 
     @Query("""
             SELECT p FROM Post p JOIN FETCH p.owner
+            WHERE p.owner.id = :userId
+            """)
+    List<Post> findPostsOwnedBy(@Param("userId") String userId);
+
+    @Query("""
+            SELECT p FROM Post p JOIN FETCH p.owner
             WHERE p.reply IS NULL
     """)
     List<Post> findPostsNotRepliedTo();
