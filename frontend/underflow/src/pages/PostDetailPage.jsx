@@ -110,6 +110,7 @@ const PostDetail = () => {
         onReply={handleReply}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
+        navigate={navigate}
         isDetailView={true} 
       />
 
@@ -137,6 +138,7 @@ const PostDetail = () => {
                   onReply={handleReply}
                   onUpdate={handleUpdate}
                   onDelete={handleDelete}
+                  navigate={navigate}
                 />
               </div>
             ))

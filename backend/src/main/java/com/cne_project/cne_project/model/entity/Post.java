@@ -3,8 +3,6 @@ package com.cne_project.cne_project.model.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 
-import java.time.Instant;
-
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -29,7 +27,7 @@ public class Post {
     private Integer rating = 0;
 
     @Column(nullable = false)
-    private Long creation = Instant.now().getEpochSecond();
+    private Long creation = System.currentTimeMillis();
 
     protected Post() {}
 

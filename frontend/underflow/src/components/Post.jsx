@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import './Post.css';
 
-const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, isDetailView = false }) => {
+const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, navigate, isDetailView = false }) => {
   const { id, authorName, authorId, content, rating, creation } = post;
   const { user } = useAuth();
   
@@ -24,7 +24,7 @@ const Post = ({ post, onIncreaseRating, onReply, onUpdate, onDelete, isDetailVie
   return (
     <div className="post-card">
       <div className="post-header">
-        <strong>{authorName} {isAuthor && "(You)"}</strong>
+        <strong onClick={() => navigate(`/profile/${authorId}`)}>{authorName} {isAuthor && "(You)"}</strong>
         <span>{formattedTime} - {formattedDate}</span>
       </div>
       
