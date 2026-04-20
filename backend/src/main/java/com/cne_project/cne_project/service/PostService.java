@@ -201,6 +201,26 @@ public class PostService {
                 .toList();
     }
 
+    public List<PostViewDTO> getAllPostsBy(String userId) {
+        return postRepository.findPostsOwnedBy(userId)
+                .stream()
+                .map(post -> {
+                    String content = post.getContent();
+                    String preview = (content != null && content.length() > 30)
+                            ? content.substring(0, 30)
+                            : content;
+
+                    return new PostViewDTO(
+                            post.getId(),
+                            post.getOwner().getId(),
+                            post.getOwner().getUsername(),
+                            preview,
+                            post.getCreation()
+                    );
+                })
+                .toList();
+    }
+
     public List<PostResponseDTO> getAllPostsReplies(String postId) {
         return fetchAllReplies(postRepository.findDirectReplies(postId))
                 .stream()

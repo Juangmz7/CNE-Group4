@@ -17,6 +17,11 @@ const PostDetail = () => {
     const fetchMainPost = async () => {
       try {
         setIsPostLoading(true);
+
+        setReplies([]);
+        setHasFetchedReplies(false);
+        setIsRepliesLoading(false);
+
         const response = await axios.get(`/post/${postId}`);
         setPost(response.data);
       } catch (error) {
@@ -25,6 +30,7 @@ const PostDetail = () => {
         setIsPostLoading(false);
       }
     };
+    
     if (postId) fetchMainPost();
   }, [postId]);
 
@@ -110,6 +116,7 @@ const PostDetail = () => {
         onReply={handleReply}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
+        navigate={navigate}
         isDetailView={true} 
       />
 
@@ -137,6 +144,7 @@ const PostDetail = () => {
                   onReply={handleReply}
                   onUpdate={handleUpdate}
                   onDelete={handleDelete}
+                  navigate={navigate}
                 />
               </div>
             ))

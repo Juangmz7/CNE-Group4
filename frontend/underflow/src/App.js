@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import HomePage from './pages/HomePage';
 import PostDetail from './pages/PostDetailPage';
+import ProfileDetail from './pages/ProfileDetailPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/post/:postId" element={<PostDetail />} />
+            <Route path="/profile/:profileId" element={<ProfileDetail />} />
           </Route>
 
           {/* Catch-all redirect to home (which redirects to login if unauthenticated) */}

@@ -26,7 +26,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         return new UserProfileResponseDTO(
-                userId, user.getUsername(), user.getKarma()
+                userId, user.getUsername(), user.getEmail(), user.getCreation(), user.getKarma()
         );
     }
 

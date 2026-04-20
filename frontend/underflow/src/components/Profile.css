@@ -1,0 +1,49 @@
+.profile-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+    font-family: sans-serif;
+}
+
+.profile-header {
+    display: flex;
+    margin-bottom: 12px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-header h2 {
+    margin: 0;
+}
+
+.profile-header img {
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+
+.profile-body {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.profile-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn {
+    margin-left: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.email {
+    margin: 4px 0;
+    color: #666;
+}
