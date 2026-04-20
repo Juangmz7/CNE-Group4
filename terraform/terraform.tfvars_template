@@ -1,0 +1,2 @@
+subscription_id = "Your-Azure-Subscription_id"
+postgresql_server_administrator_username = "Your_Postgres_Admin_password"
