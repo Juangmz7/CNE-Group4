@@ -1,0 +1,79 @@
+name: Build and Deploy Spring Azure Function
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/src/**'
+      - 'backend/pom.xml'
+      - '.github/workflows/deploy_spring_cloud_backend.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'backend/src/**'
+      - 'backend/pom.xml'
+      - '.github/workflows/deploy_spring_cloud_backend.yaml'
+
+env:
+  JAVA_VERSION: '21'
+  JAVA_DISTRIBUTION: 'microsoft'
+  POM_DIRECTORY: 'backend'
+  AZURE_FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Build and Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: 'maven'
+
+      - name: Maven Clean Package
+        working-directory: ${{ env.POM_DIRECTORY }}
+        run: mvn clean package
+
+      - name: Upload Artifact
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: function-app-artifact
+          path: ${{ env.POM_DIRECTORY }}/target/azure-functions/
+
+  deploy-to-azure:
+    name: Deploy to Azure
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'push'
+    environment: production
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: function-app-artifact
+          path: target/azure-functions/
+
+      - name: Azure Login via OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy Azure Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: target/azure-functions/${{ env.AZURE_FUNCTIONAPP_NAME }}
