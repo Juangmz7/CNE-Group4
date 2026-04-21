@@ -22,7 +22,7 @@
         <azure.functions.maven.plugin.version>1.36.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.1.0</azure.functions.java.library.version>
 
-        <functionAppName>function-app-name</functionAppName>
+        <functionAppName>function-app</functionAppName>
         <resourceGroup>resource-group</resourceGroup>
         <region>uaenorth</region>
     </properties>
