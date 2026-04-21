@@ -21,6 +21,8 @@ env:
   JAVA_DISTRIBUTION: 'microsoft'
   POM_DIRECTORY: 'backend'
   AZURE_FUNCTIONAPP_NAME: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
+  AZURE_REGION: 'uaenorth'
+  AZURE_RESOURCE_GROUP: 'cne-final-project'
 
 permissions:
   id-token: write
