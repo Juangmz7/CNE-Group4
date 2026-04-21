@@ -24,8 +24,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${jwt.keys.private.path}")
-    private String privateKeyPath;
+    @Value("${jwt.keys.private.base64}")
+    private String privateKeyBase64;
 
     @Value("${jwt.keys.public.path}")
     private String publicKeyPath;
@@ -38,17 +38,17 @@ public class JwtService {
     // Convert Resource -> Key on startup
     @PostConstruct
     public void initKeys() throws Exception {
-        this.privateKey = readPrivateKey(privateKeyPath);
+        this.privateKey = parsePrivateKey(privateKeyBase64);
         this.publicKey = readPublicKey(publicKeyPath);
     }
 
-    private PrivateKey readPrivateKey(String path) throws Exception {
-        String key = new String(Files.readAllBytes(Paths.get(path)))
+    private PrivateKey parsePrivateKey(String base64Key) throws Exception {
+        String cleanKey = base64Key
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
-                .replaceAll("\\s", ""); // Remove newlines/spaces
+                .replaceAll("\\s+", ""); // Remove newlines/spaces
 
-        byte[] encoded = Base64.getDecoder().decode(key);
+        byte[] encoded = Base64.getDecoder().decode(cleanKey);
         return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encoded));
     }
 
