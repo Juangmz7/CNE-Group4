@@ -6,9 +6,7 @@ import lombok.Builder;
 @Entity
 @Table(name = "users")
 public class User {
-
     @Id
-    @Column(length = 32)
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
@@ -53,4 +51,5 @@ public class User {
     public void setCreation(Long creation) { this.creation = creation; }
 
     public Integer getKarma() { return karma.getKarma(); }
+    public void setKarma(UserKarma karma) { this.karma = karma; }
 }

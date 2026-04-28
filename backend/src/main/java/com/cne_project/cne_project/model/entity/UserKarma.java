@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "user_karma")
 public class UserKarma {
-
     @Id
-    @Column(length = 32)
     private String id;
 
     @Column(nullable = false)
