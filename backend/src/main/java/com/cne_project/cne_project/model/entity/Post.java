@@ -6,10 +6,8 @@ import lombok.Builder;
 @Entity
 @Table(name = "posts")
 public class Post {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(length = 32)
     private String id;
 
     @Column(nullable = false)

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Profile from '../components/Profile';
 import Post from '../components/Post';
+import Header from "../components/Header";
 
 const ProfileDetail = () => {
   const { profileId } = useParams();
@@ -47,7 +48,7 @@ const ProfileDetail = () => {
 
   return (
     <div style={{ padding: '20px', maxWidth: '700px', margin: '0 auto' }}>
-
+      <Header />
       {/* Profile Section */}
       <Profile 
         profile={profile}

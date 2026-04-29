@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Post from '../components/Post';
+import Header from "../components/Header";
 
 const PostDetail = () => {
   const { postId } = useParams();
@@ -105,6 +106,7 @@ const PostDetail = () => {
 
   return (
     <div style={{ padding: '20px', maxWidth: '700px', margin: '0 auto' }}>
+      <Header />
       <button onClick={() => navigate('/')} style={{ marginBottom: '20px' }}>
         ← Back to Feed
       </button>
