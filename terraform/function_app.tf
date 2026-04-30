@@ -39,6 +39,10 @@ resource "azurerm_linux_function_app" "spring_func" {
   storage_account_access_key = azurerm_storage_account.func_storage.primary_access_key
   service_plan_id            = azurerm_service_plan.func_plan.id
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   site_config {
     application_stack {
       java_version = "21"
@@ -59,5 +63,7 @@ resource "azurerm_linux_function_app" "spring_func" {
     "SPRING_DATASOURCE_URL"      = "jdbc:postgresql://${azurerm_postgresql_flexible_server.db_server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.app_db.name}?sslmode=require"
     "SPRING_DATASOURCE_USERNAME" = var.postgresql_server_administrator_username
     "SPRING_DATASOURCE_PASSWORD" = random_password.rp.result
+
+    "JWT_PRIVATE_KEY_B64" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.jwt_private_key.versionless_id})"
   }
 }

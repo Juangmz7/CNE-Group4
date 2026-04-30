@@ -3,6 +3,8 @@ resource "azurerm_resource_group" "main" {
   location = var.resource_group_location
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "random_integer" "ri" {
   min = 10000
   max = 99999

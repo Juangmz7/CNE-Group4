@@ -66,3 +66,9 @@ variable "function_app_storage_account_replication_type" {
     description = "Replication type for the Function app storage account"
     sensitive   = false
 }
+
+variable "jwt_private_key_b64" {
+  description = "JWT private key in base64"
+  type        = string
+  sensitive   = true
+}
