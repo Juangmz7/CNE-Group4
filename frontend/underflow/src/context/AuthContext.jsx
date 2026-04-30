@@ -33,6 +33,27 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
+  // Validate token on app initialization
+  useEffect(() => {
+    const validateToken = async () => {
+      if (token) {
+        try {
+          await axios.get('/ping/', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+
+          // Token is valid, user stays logged in
+        } catch (error) {
+          // Token is invalid or expired, clear everything
+          setToken(null);
+          setUser(null);
+        }
+      }
+    };
+
+    validateToken();
+  }, []);
+
   const login = async (credentials) => {
     try {
       const response = await axios.post('/auth/login', credentials);
