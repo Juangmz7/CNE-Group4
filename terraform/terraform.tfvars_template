@@ -1,2 +1,3 @@
 subscription_id = "Your-Azure-Subscription_id"
 postgresql_server_administrator_username = "Your_Postgres_Admin_password"
+jwt_private_key_b64 = 
