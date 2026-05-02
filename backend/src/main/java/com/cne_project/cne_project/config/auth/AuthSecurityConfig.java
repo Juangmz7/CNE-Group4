@@ -41,17 +41,22 @@ public class AuthSecurityConfig {
         return http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(s -> s
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .sessionFixation().none()
+                )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login",
-                                "/webjars/**",
-                                "/error",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html"
-                        ).permitAll() // Allow access without token or headers
+                        .requestMatchers(request -> {
+                            String uri = request.getRequestURI();
+                            if (uri == null) return false;
+
+                            return uri.endsWith("api/auth/register") ||
+                                    uri.endsWith("api/auth/login") ||
+                                    uri.contains("swagger-ui") ||
+                                    uri.contains("api-docs") ||
+                                    uri.contains("webjars") ||
+                                    uri.endsWith("error");
+                        }).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

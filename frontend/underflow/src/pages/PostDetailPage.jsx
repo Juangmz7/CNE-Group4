@@ -19,11 +19,12 @@ const PostDetail = () => {
       try {
         setIsPostLoading(true);
 
-        setReplies([]);
-        setHasFetchedReplies(false);
-        setIsRepliesLoading(false);
-
-        const response = await axios.get(`/post/${postId}`);
+        const storedToken = localStorage.getItem('jwt_token');
+        const response = await axios.get(`/post/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${storedToken}`
+          }
+        });
         setPost(response.data);
       } catch (error) {
         console.error("Error fetching main post:", error);
