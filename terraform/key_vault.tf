@@ -26,4 +26,8 @@ resource "azurerm_key_vault_secret" "jwt_private_key" {
   name         = "jwt-private-key-b64"
   value        = var.jwt_private_key_b64
   key_vault_id = azurerm_key_vault.key-vault.id
+
+  depends_on = [
+    azurerm_key_vault_access_policy.terraform_policy
+  ]
 }
