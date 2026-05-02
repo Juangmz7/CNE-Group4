@@ -24,7 +24,7 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${JWT_PRIVATE_KEY_B64}")
+    @Value("${jwt.keys.private.base64}")
     private String privateKeyBase64;
 
     @Value("${jwt.keys.public.path}")
