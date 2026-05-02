@@ -24,7 +24,9 @@ const RegisterPage = () => {
     setIsLoading(true);
 
     try {
-      await axios.post('/auth/register', formData);
+      await axios.post('/auth/register', formData, {
+        headers: { Authorization: null } // Ensure no token is sent during registration
+      });
       
       navigate('/login');
     } catch (err) {

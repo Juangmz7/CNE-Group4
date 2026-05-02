@@ -8,10 +8,10 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -28,7 +28,7 @@ public class JwtService {
     private String privateKeyBase64;
 
     @Value("${jwt.keys.public.path}")
-    private String publicKeyPath;
+    private Resource publicKeyResource;
 
     // Hold the actual keys
     private PrivateKey privateKey;
@@ -39,7 +39,7 @@ public class JwtService {
     @PostConstruct
     public void initKeys() throws Exception {
         this.privateKey = parsePrivateKey(privateKeyBase64);
-        this.publicKey = readPublicKey(publicKeyPath);
+        this.publicKey = readPublicKey(publicKeyResource);
     }
 
     private PrivateKey parsePrivateKey(String base64Key) throws Exception {
@@ -52,8 +52,10 @@ public class JwtService {
         return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(encoded));
     }
 
-    private PublicKey readPublicKey(String path) throws Exception {
-        String key = new String(Files.readAllBytes(Paths.get(path)))
+    private PublicKey readPublicKey(Resource resource) throws Exception {
+        byte[] keyBytes = FileCopyUtils.copyToByteArray(resource.getInputStream());
+
+        String key = new String(keyBytes)
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
                 .replaceAll("\\s", "");

@@ -38,15 +38,21 @@ export const AuthProvider = ({ children }) => {
     const validateToken = async () => {
       if (token) {
         try {
-          await axios.get('/ping/', {
+          // Token is valid, user stays logged in
+          const response = await axios.get('/ping/', {
             headers: { Authorization: `Bearer ${token}` }
           });
 
-          // Token is valid, user stays logged in
+          // Spring Azure Functions might return a "successfully failed" response
+          // If so, if the reported status is not 200, we consider the token invalid
+          if (response.data?.status && response.data?.status !== 200) {
+            throw new Error(response.data.message);
+          }
         } catch (error) {
           // Token is invalid or expired, clear everything
           setToken(null);
           setUser(null);
+          delete axios.defaults.headers.common['Authorization'];
         }
       }
     };
@@ -56,8 +62,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     try {
-      const response = await axios.post('/auth/login', credentials);
-      
+      const response = await axios.post('/auth/login', credentials, {
+        headers: { Authorization: null } // Ensure no token is sent during login
+      });
       const { id, username, accessToken } = response.data;
       
       if (!accessToken) {
@@ -65,7 +72,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-      
+
       setToken(accessToken);
       setUser({ id, username });
       
