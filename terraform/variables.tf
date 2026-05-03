@@ -6,7 +6,7 @@ variable "subscription_id" {
 
 variable "resource_group_name" {
     type        = string
-    default     = "cne-final-project"
+    default     = "cne-final-project-v1"
     description = "Name of the resource group"
     sensitive = false
 }
