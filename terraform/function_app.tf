@@ -64,6 +64,9 @@ resource "azurerm_linux_function_app" "spring_func" {
     "SPRING_DATASOURCE_USERNAME" = var.postgresql_server_administrator_username
     "SPRING_DATASOURCE_PASSWORD" = random_password.rp.result
 
-    "JWT_PRIVATE_KEY_B64" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.jwt_private_key.versionless_id})"
+    "FRONTEND_URL" = "https://${azurerm_linux_web_app.frontend_app.default_hostname}"
+
+    "JWT_KEYS_PRIVATE_BASE64" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.jwt_private_key.versionless_id})"
+    "JWT_KEYS_PUBLIC_PATH" = "classpath:certs/public.pem"
   }
 }
