@@ -4,6 +4,8 @@ import com.cne_project.cne_project.config.exception.ApiErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -35,6 +37,9 @@ public class AuthSecurityConfig {
     final private UserDetailsService userDetailsService;
     final private ObjectMapper objectMapper;
     final private JwtFilter jwtFilter;
+
+    @Value("${FRONTEND_URL:http://localhost:3000}")
+    private String frontendUrl;
 
     @Bean
     public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
@@ -113,7 +118,9 @@ public class AuthSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // Set to your React development server origin
-        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedOrigins(List.of(
+            "http://localhost:3000", frontendUrl
+        ));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
