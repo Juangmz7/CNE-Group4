@@ -47,11 +47,6 @@ resource "azurerm_linux_function_app" "spring_func" {
     application_stack {
       java_version = "21"
     }
-
-    cors {
-      allowed_origins     = ["*"]
-      support_credentials = false 
-    }
   }
 
 
