@@ -31,7 +31,6 @@ import java.util.List;
 
 
 @Configuration
-@RequiredArgsConstructor
 public class AuthSecurityConfig {
 
     final private UserDetailsService userDetailsService;
@@ -40,6 +39,14 @@ public class AuthSecurityConfig {
 
     @Value("${FRONTEND_URL:http://localhost:3000}")
     private String frontendUrl;
+
+    public AuthSecurityConfig(UserDetailsService userDetailsService,
+                              ObjectMapper objectMapper,
+                              JwtFilter jwtFilter) {
+        this.userDetailsService = userDetailsService;
+        this.objectMapper = objectMapper;
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain authFilterChain(HttpSecurity http) throws Exception {
