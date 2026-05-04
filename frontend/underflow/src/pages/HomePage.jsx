@@ -4,7 +4,7 @@ import CreatePostInput from "../components/home/CreatePostInput";
 import Header from "../components/Header";
 
 const HomePage = () => {
-  const [token, setToken] = useState(localStorage.getItem('jwt_token') || null);
+  const [token] = useState(localStorage.getItem('jwt_token') || null);
 
   return (
     <>

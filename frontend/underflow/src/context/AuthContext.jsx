@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     validateToken();
-  }, []);
+  }, [token]);
 
   const login = async (credentials) => {
     try {
