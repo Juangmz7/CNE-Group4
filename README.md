@@ -31,6 +31,20 @@ jwt_private_key_b64                      = "your_base64_encoded_jwt_private_key"
 
 > `terraform.tfvars` is gitignored and should never be committed.
 
+Place the corresponding RSA public key in:
+ 
+```
+src/main/resources/certs/public.pem
+```
+ 
+It must match the private key encoded in `jwt_private_key_b64`. Expected format:
+ 
+```
+-----BEGIN PUBLIC KEY-----
+<base64 encoded key>
+-----END PUBLIC KEY-----
+```
+
 ### 1.2 Initialize and apply
 
 ```bash
