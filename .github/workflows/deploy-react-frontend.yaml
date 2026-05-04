@@ -17,17 +17,15 @@ on:
 env:
   NODE_VERSION: '20.x'
   AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_FRONTEND_NAME }}
-  BUILD_OUTPUT_DIR: 'build' 
+  BUILD_OUTPUT_DIR: 'build'
   FRONTEND_DIRECTORY: 'frontend/underflow'
-
-permissions:
-  id-token: write
-  contents: read
 
 jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_API_BASE_URL: ${{ vars.REACT_APP_API_BASE_URL }}
     defaults:
       run:
         working-directory: ${{ env.FRONTEND_DIRECTORY }}
