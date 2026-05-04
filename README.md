@@ -59,8 +59,8 @@ Once apply completes, get the values you'll need for GitHub configuration:
 
 ```bash
 # App names (for GitHub repository variables)
-terraform output frontend_webapp_hostname
-terraform output backend_function_app_hostname
+terraform output frontend_webapp_name
+terraform output backend_function_app_name
 
 # Full URLs (for reference and CORS configuration)
 terraform output frontend_webapp_url
@@ -82,8 +82,8 @@ Create the following variables using the values from `terraform output`:
 
 | Variable | Value |
 |---|---|
-| `AZURE_WEBAPP_FRONTEND_NAME` | output of `terraform output frontend_webapp_hostname` |
-| `AZURE_FUNCTIONAPP_NAME` | output of `terraform output backend_function_app_hostname` |
+| `AZURE_WEBAPP_FRONTEND_NAME` | output of `terraform output frontend_webapp_name` |
+| `AZURE_FUNCTIONAPP_NAME` | output of `terraform output backend_function_app_name` |
 | `REACT_APP_API_BASE_URL` | output of `terraform output backend_function_app_url` |
 
 ### 2.2 Publish Profiles (Secrets)
