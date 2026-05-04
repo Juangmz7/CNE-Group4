@@ -68,6 +68,6 @@ resource "azurerm_linux_function_app" "spring_func" {
     "FRONTEND_URL" = "https://${azurerm_linux_web_app.frontend_app.default_hostname}"
 
     "JWT_KEYS_PRIVATE_BASE64" = "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault_secret.jwt_private_key.versionless_id})"
-    "JWT_KEYS_PUBLIC_PATH" = "classpath:certs/public.pem"
+    "JWT_KEYS_PUBLIC_PATH" = var.jwt_keys_public_path
   }
 }

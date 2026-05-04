@@ -72,3 +72,9 @@ variable "jwt_private_key_b64" {
   type        = string
   sensitive   = true
 }
+
+variable "jwt_keys_public_path" {
+  type        = string
+  default     = "classpath:certs/public.pem"
+  description = "Path to the JWT public key file"
+}
