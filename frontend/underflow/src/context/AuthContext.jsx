@@ -7,6 +7,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('jwt_token'));
+  const [isLoading, setIsLoading] = useState(true);
   
   // Initialize user state from localStorage
   const [user, setUser] = useState(() => {
@@ -55,6 +56,7 @@ export const AuthProvider = ({ children }) => {
           delete axios.defaults.headers.common['Authorization'];
         }
       }
+      setIsLoading(false);
     };
 
     validateToken();
@@ -88,7 +90,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
