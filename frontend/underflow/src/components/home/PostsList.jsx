@@ -13,18 +13,16 @@ const PostsList = ({token}) => {
       },
     });
 
-    console.log("Fetched posts:", response.data);
-
     return await response.data;
   };
 
-  const { data: posts, error } = useSWR('/post', fetchAllPosts);
+  const { data: posts, error } = useSWR(token ? ['/post', token] : null, ([url]) => fetchAllPosts(url));
 
   return (
     <>
       {error && <p>Failed to load posts</p>}
       {!posts && !error && <p>Loading...</p>}
-      {posts && posts.map((post) => (
+      {Array.isArray(posts) ? (posts.map((post) => (
         <div key={post.id} style={{
           padding: "10px",
           border: "1px solid #ccc",
@@ -45,7 +43,9 @@ const PostsList = ({token}) => {
             cursor: "pointer",
           }} />
         </div>
-      ))}
+      ))) : (
+        posts && <p>Unauthorized or Session Expired. Please log in again.</p>
+      )}
     </>
   )
 }

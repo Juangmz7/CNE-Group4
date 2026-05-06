@@ -1,10 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PostsList from "../components/home/PostsList";
 import CreatePostInput from "../components/home/CreatePostInput";
 import Header from "../components/Header";
+import {useAuth} from "../context/AuthContext";
 
 const HomePage = () => {
-  const [token] = useState(localStorage.getItem('jwt_token') || null);
+  const { token } = useAuth();
 
   return (
     <>
