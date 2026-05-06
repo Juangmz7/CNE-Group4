@@ -63,7 +63,7 @@ public class PostService {
     public PostResponseDTO getPostById(String postId) {
         Post post = fetchPostById(postId);
         log.info("Returning post with id {}", postId);
-        return toPostResponseDTO(post, getCurrentUser());
+        return toPostResponseDTO(post, post.getOwner());
     }
 
     @Transactional
